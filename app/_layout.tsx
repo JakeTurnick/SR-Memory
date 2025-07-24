@@ -1,12 +1,16 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from 'expo-router';
+import { Drawer } from 'expo-router/drawer';
 import 'react-native-reanimated';
 
+
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 export default function RootLayout() {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -19,7 +23,29 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Drawer>
+          <Drawer.Screen
+            name="index"
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Drawer.Screen
+            name="deckViewer"
+            options={{
+              title: 'Deck Viewer',
+            }}
+          />
+        </Drawer>
+      </GestureHandlerRootView>
+    </ThemeProvider>
+  );
+}
+
+/*
+
+<Stack
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: 'transparent' },
@@ -27,7 +53,5 @@ export default function RootLayout() {
         <Stack.Screen name="(home)" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
-}
+
+      */
