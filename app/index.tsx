@@ -1,11 +1,12 @@
+import { sharedStyles } from "@/components/ui/sharedStyles";
 import { Link, Stack } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Home() {
     return (
-        <View style={styles.container}>
+        <View style={sharedStyles.centeredContainer}>
             <Stack.Screen options={{ title: 'Home' }} />
-            <Text style={styles.text}>Home screen</Text>
+            <Text style={sharedStyles.text}>Home screen</Text>
             <Link href="./deckViewer" style={styles.text}>View decks</Link>
         </View>
     );
