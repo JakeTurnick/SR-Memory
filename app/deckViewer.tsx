@@ -1,14 +1,14 @@
 import { sharedStyles } from "@/components/ui/sharedStyles";
 import { ExternalPathString, Link, RelativePathString, Stack } from "expo-router";
 import { useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import * as DataTypes from "@/constants/DataTypes";
 import { exampleDecks } from "@/constants/dummyData";
 
 export default function DeckViewer() {
     return (
-        <View style={[sharedStyles.centeredContainer, { 
+        <ScrollView contentContainerStyle={[sharedStyles.centeredContainer, { 
             display: 'flex',
             flexDirection: 'row',
             width: '100%',
@@ -21,7 +21,7 @@ export default function DeckViewer() {
                 // this prevents modal for being rendered for all decks - as oppsed to the one clicked
                 //renderDecks(exampleDecks)
             }
-        </View>
+        </ScrollView>
     )
 }
 
@@ -114,7 +114,8 @@ function renderDeckOptions(deck: DataTypes.Deck, setShowModal: (show: boolean) =
             width: '100%',
             paddingTop: 10,
         }}>
-            {deckOptionsBtn(setShowModal, `./deck/${deck.id}`, "Edit Deck")}
+
+            {deckOptionsBtn(setShowModal, `./editDeck/${deck.id}`, "Edit Deck")}
             <Link href="./deckViewer" style={[sharedStyles.text, deckSytles.deckOptionsBtn]}>
                 <Text>Start Review</Text>
                 <Text>(x days ago)</Text>
