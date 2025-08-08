@@ -43,15 +43,3 @@ export default function RootLayout() {
   );
 }
 
-/*
-
-<Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: 'transparent' },
-        }}>
-        <Stack.Screen name="(home)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-
-      */
