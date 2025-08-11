@@ -1,12 +1,12 @@
-import { useLocalSearchParams } from "expo-router";
+import { Button } from "@react-navigation/elements";
+import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, DimensionValue, Platform, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, DimensionValue, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { sharedStyles } from "@/components/ui/sharedStyles";
 
 import * as DataTypes from "@/constants/DataTypes";
 import { exampleDecks } from "@/constants/dummyData";
-import { Button } from "@react-navigation/elements";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -81,13 +81,18 @@ export default function DeckEditor() {
             ></TextInput>}
             
             <ScrollView contentContainerStyle={Platform.OS === 'web' ? styles.webScrollView : styles.mobileScrollView}>
-                {deck.cards.map(card => renderCard(card))}
+                {deck.cards.map(card => renderCard(card, deck.id))}
             </ScrollView>
         </View>
     )
 }
 
-function renderCard(card: DataTypes.Card) {
+
+
+function renderCard(card: DataTypes.Card, deckId: string) {
+
+    const router = useRouter();
+
     let minWidth: DimensionValue = '90%';
     let minHeight: DimensionValue = null;
     let maxWidht: DimensionValue = null;
@@ -100,7 +105,13 @@ function renderCard(card: DataTypes.Card) {
     }
 
     return (
-        <View key={card.id} style={[sharedStyles.centeredContainer, {
+        <Pressable key={card.id} 
+        //href={{ pathname: `/editCard/[id]`, params: { id: card.id, deckId: deckId}}}
+        onPress={() => {
+            console.log("Navigate to editCard/[id] with cardId: ", card.id, " and deckId: ", deckId)
+            router.push({ pathname: 'editCard/[id]' as RelativePathString, params: { cardId: card.id, deckId} })
+        }}
+        style={[sharedStyles.centeredContainer, {
   
             margin: 10,
             minWidth: minWidth,
@@ -129,7 +140,7 @@ function renderCard(card: DataTypes.Card) {
                     {face.textContent.value}
                 </Text>
             ))}
-        </View>
+        </Pressable>
     );
 }
 
