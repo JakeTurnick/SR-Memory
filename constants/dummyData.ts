@@ -8,19 +8,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card1-face1",
                 cardId: "card1",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "This is the first face of the card."
-                }
+                content: [
+                        {
+                        type: "text",
+                        value: "This is the first face of the card."
+                    }
+                ],
             },
             {
                 id: "card1-face2",
                 cardId: "card1",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "This is the second face of the card."
-                }
+                content: [
+                        {
+                        type: "text",
+                        value: "This is the second face of the card."
+                    },
+                ],
             }
         ],
         decks: ["deck1", "deck2"]
@@ -32,19 +36,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card2-face1",
                 cardId: "card2",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is the capital of France?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is the capital of France?"
+                    }
+                ]
             },
             {
                 id: "card2-face2",
                 cardId: "card2",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "Paris"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Paris"
+                    }
+                ]
             }
         ],
         decks: ["deck1"]
@@ -56,19 +64,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card3-face1",
                 cardId: "card3",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is 2 + 2?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is 2 + 2?"
+                    },
+                ],
             },
             {
                 id: "card3-face2",
                 cardId: "card3",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "4"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "4"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]
@@ -80,19 +92,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card4-face1",
                 cardId: "card4",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "Who wrote 'Hamlet'?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Who wrote 'Hamlet'?"
+                    },
+                ],
             },
             {
                 id: "card4-face2",
                 cardId: "card4",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "William Shakespeare"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "William Shakespeare"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]
@@ -104,19 +120,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card5-face1",
                 cardId: "card5",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is the boiling point of water (°C)?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is the boiling point of water (°C)?"
+                    },
+                ],
             },
             {
                 id: "card5-face2",
                 cardId: "card5",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "100"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "100"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]
@@ -128,19 +148,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card6-face1",
                 cardId: "card6",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is the largest planet in our solar system?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is the largest planet in our solar system?"
+                    },
+                ]
             },
             {
                 id: "card6-face2",
                 cardId: "card6",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "Jupiter"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Jupiter"
+                    },
+                ]
             }
         ],
         decks: ["deck1"]
@@ -152,19 +176,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card7-face1",
                 cardId: "card7",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is the chemical symbol for gold?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is the chemical symbol for gold?"
+                    },
+                ],
             },
             {
                 id: "card7-face2",
                 cardId: "card7",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "Au"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Au"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]
@@ -176,19 +204,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card8-face1",
                 cardId: "card8",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "Who painted the Mona Lisa?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Who painted the Mona Lisa?"
+                    },
+                ]
             },
             {
                 id: "card8-face2",
                 cardId: "card8",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "Leonardo da Vinci"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "Leonardo da Vinci"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]
@@ -200,19 +232,23 @@ export const exampleCards: DataTypes.Card[] = [
                 id: "card9-face1",
                 cardId: "card9",
                 faceIndex: 1,
-                textContent: {
-                    type: "text",
-                    value: "What is the smallest prime number?"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "What is the smallest prime number?"
+                    },
+                ]
             },
             {
                 id: "card9-face2",
                 cardId: "card9",
                 faceIndex: 2,
-                textContent: {
-                    type: "text",
-                    value: "2"
-                }
+                content: [
+                    {
+                        type: "text",
+                        value: "2"
+                    },
+                ],
             }
         ],
         decks: ["deck1"]

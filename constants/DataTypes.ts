@@ -7,9 +7,10 @@ export type CardFace = {
     id: string; // Unique identifier for the card face
     cardId: string; // 1 card to many face
     faceIndex: number; // which face for a card? 1, 2, 3, ...
-    textContent: TextContent;
+    //textContent?: TextContent;
     //[key: string]: TextContent | MultipleChoiceContent | ImageContent; // flexible properties for different content types
     // ^^ future update: allows x number of properties, of multiple types - for when cards are more advanced
+    content: (TextContent)[] // upgrade to -> (TextContent | MultipleChoiceContent | ImageContent)
 }
 export type Card = {
     id: string; // Unique identifier for the card
