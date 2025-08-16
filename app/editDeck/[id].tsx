@@ -137,7 +137,7 @@ function renderCard(card: DataTypes.Card, deckId: string) {
                     padding: 6,
                 }}>
                     {face.faceIndex === 1 ? "Question: " : "Answer: "}
-                    {face.textContent.value}
+                    {face.content[0].value}
                 </Text>
             ))}
         </Pressable>
