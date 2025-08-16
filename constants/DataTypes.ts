@@ -1,4 +1,8 @@
-export type TextContent = {
+export type Content = {
+    id: string;
+}
+
+export interface TextContent extends Content  {
     type: "text"; // identifies this as text content
     value: string; // the actual text shown
 };
@@ -10,7 +14,7 @@ export type CardFace = {
     //textContent?: TextContent;
     //[key: string]: TextContent | MultipleChoiceContent | ImageContent; // flexible properties for different content types
     // ^^ future update: allows x number of properties, of multiple types - for when cards are more advanced
-    content: (TextContent)[] // upgrade to -> (TextContent | MultipleChoiceContent | ImageContent)
+    content: Array<TextContent> // upgrade to -> (TextContent | MultipleChoiceContent | ImageContent)
 }
 export type Card = {
     id: string; // Unique identifier for the card

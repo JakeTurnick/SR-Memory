@@ -9,7 +9,8 @@ export const exampleCards: DataTypes.Card[] = [
                 cardId: "card1",
                 faceIndex: 1,
                 content: [
-                        {
+                    {
+                        id: "content-1",
                         type: "text",
                         value: "This is the first face of the card."
                     }
@@ -20,7 +21,8 @@ export const exampleCards: DataTypes.Card[] = [
                 cardId: "card1",
                 faceIndex: 2,
                 content: [
-                        {
+                    {
+                        id: "content-2",
                         type: "text",
                         value: "This is the second face of the card."
                     },
@@ -38,6 +40,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-3",
                         type: "text",
                         value: "What is the capital of France?"
                     }
@@ -49,6 +52,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-4",
                         type: "text",
                         value: "Paris"
                     }
@@ -66,6 +70,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-5",
                         type: "text",
                         value: "What is 2 + 2?"
                     },
@@ -77,6 +82,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-6",
                         type: "text",
                         value: "4"
                     },
@@ -94,6 +100,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-7",
                         type: "text",
                         value: "Who wrote 'Hamlet'?"
                     },
@@ -105,6 +112,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-8",
                         type: "text",
                         value: "William Shakespeare"
                     },
@@ -122,6 +130,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-9",
                         type: "text",
                         value: "What is the boiling point of water (°C)?"
                     },
@@ -133,6 +142,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-10",
                         type: "text",
                         value: "100"
                     },
@@ -150,6 +160,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-11",
                         type: "text",
                         value: "What is the largest planet in our solar system?"
                     },
@@ -161,6 +172,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-12",
                         type: "text",
                         value: "Jupiter"
                     },
@@ -178,6 +190,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-13",
                         type: "text",
                         value: "What is the chemical symbol for gold?"
                     },
@@ -189,6 +202,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-14",
                         type: "text",
                         value: "Au"
                     },
@@ -206,6 +220,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-15",
                         type: "text",
                         value: "Who painted the Mona Lisa?"
                     },
@@ -217,6 +232,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-16",
                         type: "text",
                         value: "Leonardo da Vinci"
                     },
@@ -234,6 +250,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 1,
                 content: [
                     {
+                        id: "content-17",
                         type: "text",
                         value: "What is the smallest prime number?"
                     },
@@ -245,6 +262,7 @@ export const exampleCards: DataTypes.Card[] = [
                 faceIndex: 2,
                 content: [
                     {
+                        id: "content-18",
                         type: "text",
                         value: "2"
                     },
