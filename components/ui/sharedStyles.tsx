@@ -15,7 +15,22 @@ export const sharedStyles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         color: '#999999',
-    }
+    },
+    icon: {
+        height: 32,
+        width: 32,
+        color: "#aaaaaa"
+    },
+    iconSm: {
+        height: 24,
+        width: 24,
+        color: "#aaaaaa"
+    },
+    iconLg: {
+        height: 48,
+        width: 48,
+        color: "#aaaaaa"
+    },
 });
 
 //not quite sure how JSDoc works, but something to explore in the future for large project documentation
