@@ -1,8 +1,11 @@
 import { sharedStyles } from "@/components/ui/sharedStyles";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, TextInput, View } from "react-native";
 
+import leftArrow from "@/assets/Icons/arrow_left.svg";
+import rightArrow from "@/assets/Icons/arrow_right.svg";
+import circle from "@/assets/Icons/circle.svg";
 import * as DataTypes from "@/constants/DataTypes";
 import { exampleDecks } from "@/constants/dummyData";
 
@@ -33,24 +36,31 @@ export default function editCard(props: CardProps) {
             console.log("Card found:", foundCard);
         }
     },[]);
+
+    console.log(card?.faces[faceIndex])
     
     return (
         <View style={{...sharedStyles.centeredContainer,
             borderWidth: 2,
             borderColor: '#cccccc',
             borderRadius: 10,
-            margin: 10
+            margin: 10,
+            flex: 1,
         }}>
-            <ScrollView contentContainerStyle={{
-                width: '100%',
+            <ScrollView style={{flex: 1, width: "100%",}}
+            contentContainerStyle={{
+                flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: 20,
-                flexGrow: 1,
             }}>
-                <Text style={{...sharedStyles.text}}>This will be card info</Text>
-                <Text style={sharedStyles.h1Text}>{card?.faces[faceIndex].textContent.value}</Text>
-                <Text style={sharedStyles.text}>This feature is under construction.</Text>
+                {/* This should be a map loop for each piece of content on the card */}
+                {card?.faces[faceIndex].content.map(content => renderCardContent(content))
+                /* wtf is going on here?*/
+                    //? renderCardContent(card?.faces[faceIndex].content[]) 
+                    //: <Text>This card is missing content...</Text>
+                }
+
             </ScrollView>
             
             <View style={{
@@ -58,16 +68,38 @@ export default function editCard(props: CardProps) {
                 height: '20%',
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-around',
+                justifyContent: 'center',
+                alignItems: "center",
                 padding: 20,
                 borderTopWidth: 2,
                 borderTopColor: '#cccccc'
 
             }}>
-                <Pressable ><Text style={{...sharedStyles.text}} >Previous</Text></Pressable>
-                <Text style={{...sharedStyles.text}}> ... a dot for each face</Text>
-                <Pressable ><Text style={{...sharedStyles.text}} >Next</Text></Pressable>
+                <Pressable ><Image source={leftArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
+                {card?.faces && renderCarouselControls(card?.faces)}
+                <Pressable ><Image source={rightArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
             </View>
         </View>
+    )
+}
+
+// carousel button needs styling
+function renderCarouselControls(cardFaces: DataTypes.CardFace[]) {
+    return cardFaces.map(face => {
+        return (
+            <Pressable key={face.id} style={{padding: 5}}>
+                <Image source={circle} style={{...sharedStyles.iconSm, padding: 5}} />
+            </Pressable>
+        )
+    })
+}
+
+function renderCardContent(content: DataTypes.TextContent) {
+    if (content == null) {
+        return
+    }
+    /* switch base on content type */
+    return (
+        <TextInput key={content.id} value={content.value} style={{...sharedStyles.text, width: "100%",}}></TextInput>
     )
 }
