@@ -1,6 +1,7 @@
 import { sharedStyles } from "@/components/ui/sharedStyles";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { produce } from 'immer';
+import { SetStateAction, useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, TextInput, View } from "react-native";
 
 import leftArrow from "@/assets/Icons/arrow_left.svg";
@@ -18,6 +19,7 @@ export default function editCard(props: CardProps) {
     const { cardId, deckId } = useLocalSearchParams();
     const [card, setCard] = useState<DataTypes.Card | undefined>(props.card);
     const [faceIndex, setFaceIndex] = useState<number>(0);
+
     useEffect(() => {
         if (!props.card) {
             console.warn("No card prop");
@@ -36,8 +38,6 @@ export default function editCard(props: CardProps) {
             console.log("Card found:", foundCard);
         }
     },[]);
-
-    console.log(card?.faces[faceIndex])
     
     return (
         <View style={{...sharedStyles.centeredContainer,
@@ -54,13 +54,11 @@ export default function editCard(props: CardProps) {
                 justifyContent: 'center',
                 padding: 20,
             }}>
-                {/* This should be a map loop for each piece of content on the card */}
-                {card?.faces[faceIndex].content.map(content => renderCardContent(content))
-                /* wtf is going on here?*/
-                    //? renderCardContent(card?.faces[faceIndex].content[]) 
-                    //: <Text>This card is missing content...</Text>
+                {
+                    card?.faces[faceIndex].content.map(function(content, index) {
+                        return renderCardContent(content, index, faceIndex, setCard, card)
+                    })
                 }
-
             </ScrollView>
             
             <View style={{
@@ -73,33 +71,51 @@ export default function editCard(props: CardProps) {
                 padding: 20,
                 borderTopWidth: 2,
                 borderTopColor: '#cccccc'
-
             }}>
-                <Pressable ><Image source={leftArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
-                {card?.faces && renderCarouselControls(card?.faces)}
-                <Pressable ><Image source={rightArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
+                <Pressable 
+                    onPress={() => {
+                        if (card?.faces == null) return
+                        setFaceIndex((faceIndex - 1 + card?.faces.length) % card?.faces.length)
+                    }}
+                ><Image source={leftArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
+                {card?.faces && renderCarouselControls(card?.faces, setFaceIndex)}
+                <Pressable
+                    onPress={() => {
+                        if (card?.faces == null) return
+                        setFaceIndex((faceIndex + 1 + card?.faces.length) % card?.faces.length)
+                    }}
+                ><Image source={rightArrow} style={{...sharedStyles.iconLg}} ></Image></Pressable>
             </View>
         </View>
     )
 }
 
 // carousel button needs styling
-function renderCarouselControls(cardFaces: DataTypes.CardFace[]) {
-    return cardFaces.map(face => {
+function renderCarouselControls(cardFaces: DataTypes.CardFace[], setFaceIndex: React.Dispatch<SetStateAction<number>>) {
+    return cardFaces.map((face, index) => {
         return (
-            <Pressable key={face.id} style={{padding: 5}}>
+            <Pressable key={face.id} style={{padding: 5}}
+                onPress={() => setFaceIndex(index)}>
                 <Image source={circle} style={{...sharedStyles.iconSm, padding: 5}} />
             </Pressable>
         )
     })
 }
 
-function renderCardContent(content: DataTypes.TextContent) {
+function renderCardContent(content: DataTypes.TextContent, contentIndex: number, faceIndex: number,
+        updateState: React.Dispatch<SetStateAction<DataTypes.Card | undefined>>, card: DataTypes.Card) {
     if (content == null) {
         return
     }
     /* switch base on content type */
     return (
-        <TextInput key={content.id} value={content.value} style={{...sharedStyles.text, width: "100%",}}></TextInput>
+        <TextInput 
+            key={content.id} 
+            style={{...sharedStyles.text, width: "100%",}}
+            value={content.value}
+            onChangeText={text => updateState(produce(card, (draft) => {
+                draft.faces[faceIndex].content[contentIndex].value = text
+            }))}
+        ></TextInput>
     )
 }
