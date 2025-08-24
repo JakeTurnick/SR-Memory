@@ -1,15 +1,19 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { useNavigation } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import 'react-native-reanimated';
+
+import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { migrate } from 'drizzle-orm/expo-sqlite/migrator';
+import migrations from '../db/migrations/migrations.js';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SQLite from 'expo-sqlite';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+
 export default function RootLayout() {
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -22,6 +26,7 @@ export default function RootLayout() {
 
 
   return (
+    // return SQLiteProvider after testing
     <SQLite.SQLiteProvider databaseName="testDB" onInit={initDb}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -45,11 +50,20 @@ export default function RootLayout() {
   );
 }
 
-const initDb = async (db: SQLite.SQLiteDatabase) => {
-  const cardTable = await db.getFirstAsync("SELECT name FROM sqlite_master WHERE type='table' and name='cards';")
+const initDb = async () => {
 
-  if (!cardTable) {
-    console.log("no card table")
-    
+  const db = await SQLite.openDatabaseAsync('testDB')
+  // Wrap the raw SQLite database with Drizzle
+  const drizzleDb = drizzle(db);
+
+  // Log the start of the migration process
+  console.log('Starting migrations...');
+
+  try {
+    // Run the migrations
+    await migrate(drizzleDb, migrations);
+    console.log('Migrations complete!');
+  } catch (error) {
+    console.error('Migration failed:', error);
   }
 }

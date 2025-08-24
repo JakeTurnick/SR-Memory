@@ -7,7 +7,7 @@ export default function Home() {
         <View style={sharedStyles.centeredContainer}>
             <Stack.Screen options={{ title: 'Home' }} />
             <Text style={sharedStyles.text}>Home screen</Text>
-            <Link href="./deckViewer" style={styles.text}>View decks</Link>
+            <Link href="./deckViewer" style={{...styles.h1, padding: 10}}>View decks</Link>
         </View>
     );
 }
