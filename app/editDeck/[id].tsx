@@ -7,9 +7,7 @@ import { sharedStyles } from "@/components/ui/sharedStyles";
 
 import * as DataTypes from "@/constants/DataTypes";
 import { exampleDecks } from "@/constants/dummyData";
-import * as queries from "@/db/queries";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useSQLiteContext } from "expo-sqlite";
+import { useDeckQueries } from "@/db/queries";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -19,12 +17,13 @@ export default function DeckEditor() {
     const [deck, setDeck] = useState<DataTypes.Deck | undefined>(undefined); // value used for page
     const [unChangedDeck, setUnchangedDeck] = useState<DataTypes.Deck | undefined>(undefined); // from DB, used to compare changes
 
-    const db = useSQLiteContext()!;
-    const drizzleDB = drizzle(db);
+    //const db = useSQLiteContext()!;
+    //const drizzleDB = drizzle(db);
     //const { success, error } = useMigrations(db, migrations);
     //console.log("Migration status: ", {success, error});
+    const queries = useDeckQueries();
     
-    (window as any).db = drizzleDB;
+    //(window as any).db = drizzleDB;
     (window as any).queries = queries; // for debugging purposes, to access queries in the console
     useEffect(() => {
         
