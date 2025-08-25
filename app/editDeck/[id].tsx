@@ -7,7 +7,7 @@ import { sharedStyles } from "@/components/ui/sharedStyles";
 
 import * as DataTypes from "@/constants/DataTypes";
 import { exampleDecks } from "@/constants/dummyData";
-import { useDeckQueries } from "@/db/queries";
+import { useDatabase } from "@/db/queries";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -21,10 +21,10 @@ export default function DeckEditor() {
     //const drizzleDB = drizzle(db);
     //const { success, error } = useMigrations(db, migrations);
     //console.log("Migration status: ", {success, error});
-    const queries = useDeckQueries();
+    const db = useDatabase();
     
     //(window as any).db = drizzleDB;
-    (window as any).queries = queries; // for debugging purposes, to access queries in the console
+    (window as any).db = db; // for debugging purposes, to access queries in the console
     useEffect(() => {
         
         //console.log("testing queries: ", db, queries);

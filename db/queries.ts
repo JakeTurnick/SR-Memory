@@ -37,7 +37,7 @@ function createDeckQueries(database: any) {
 }
 
 // Custom hook to use in your components
-export function useDeckQueries() {
+export function useDatabase() {
   const SQLiteDatabase = useSQLiteContext()!;
   const database = drizzle(SQLiteDatabase);
   return createDeckQueries(database as any);
