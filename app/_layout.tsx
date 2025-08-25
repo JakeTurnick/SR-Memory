@@ -16,21 +16,21 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const initDb = async () => {
   
-  const db = await SQLite.openDatabaseAsync('testDB')
+  const database = await SQLite.openDatabaseAsync('testDB')
   
-  const drizzleDb = drizzle(db);
+  const drizzleDatabase = drizzle(database);
 
   try {
     // Run the migrations
-    await migrate(drizzleDb, migrations);
+    await migrate(drizzleDatabase, migrations);
     console.log('Migrations complete!');
   } catch (error) {
     console.error('Migration failed:', error);
   }
 
   return {
-    db,
-    drizzleDb
+    database,
+    drizzleDatabase
   }
 } 
 
@@ -49,12 +49,13 @@ export default function RootLayout() {
   }
 
   useEffect(() => {
-    initDb().then(({db, drizzleDb}) => {
-      setDb(db);
-      setDrizzleDb(drizzleDb);
-      useDrizzleStudio(drizzleDb as unknown as any);
+    initDb().then(({database, drizzleDatabase}) => {
+      setDb(database);
+      setDrizzleDb(drizzleDatabase);
+      
     })
   },[]);
+  useDrizzleStudio(drizzleDb as unknown as any);
 
   return (
     // return SQLiteProvider after testing
