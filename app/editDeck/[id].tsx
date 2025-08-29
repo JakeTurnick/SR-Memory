@@ -1,6 +1,6 @@
 import { Button } from "@react-navigation/elements";
 import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Dimensions, DimensionValue, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { sharedStyles } from "@/components/ui/sharedStyles";
@@ -93,15 +93,18 @@ export default function DeckEditor() {
             ></TextInput>}
             
             <ScrollView contentContainerStyle={Platform.OS === 'web' ? styles.webScrollView : styles.mobileScrollView}>
-                {deck.cards.map(card => renderCard(card, deck.id))}
+                {deck.cards.map(card => renderCard({card, deckId: deck.id}))}
             </ScrollView>
         </View>
     )
 }
 
+interface cardProps {
+    card: DataTypes.Card;
+    deckId: string;
+}
 
-
-function renderCard(card: DataTypes.Card, deckId: string) {
+const renderCard = memo(({card, deckId}: cardProps) => {
 
     const router = useRouter();
 
@@ -154,7 +157,7 @@ function renderCard(card: DataTypes.Card, deckId: string) {
             ))}
         </Pressable>
     );
-}
+});
 
 const styles = StyleSheet.create({
     webScrollView: {

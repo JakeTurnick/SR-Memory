@@ -1,6 +1,6 @@
 import { sharedStyles } from "@/components/ui/sharedStyles";
 import { ExternalPathString, Link, RelativePathString, Stack } from "expo-router";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import * as DataTypes from "@/constants/DataTypes";
@@ -16,7 +16,7 @@ export default function DeckViewer() {
         }]}>
             <Stack.Screen options={{ title: 'Deck Viewer' }} />
             {
-                exampleDecks.map(deck => renderDecks(deck))
+                exampleDecks.map(deck => <renderDecks deck={deck} />)
                 // map over dekcs with render single deck,
                 // this prevents modal for being rendered for all decks - as oppsed to the one clicked
                 //renderDecks(exampleDecks)
@@ -26,7 +26,7 @@ export default function DeckViewer() {
 }
 
 
-function renderDecks(deck: DataTypes.Deck) {
+const renderDecks = memo(function(deck: DataTypes.Deck) {
     const [showModal, setShowModal] = useState(false);
     return (
         <Pressable 
@@ -99,16 +99,20 @@ function renderDecks(deck: DataTypes.Deck) {
                         <Text style={sharedStyles.h1Text}>{deck.name}'s modal</Text>
                         <Text style={sharedStyles.text}>{deck.description}</Text>
                         {/* Render deck cards here */}
-                        {renderDeckOptions(deck, setShowModal)}
+                        {renderDeckOptions({deck, setShowModal})}
                     </Pressable>
                 </Pressable>
             </Modal>
         </Pressable>
     );  
+})
+
+interface deckOptionsProps {
+    deck: DataTypes.Deck;
+    setShowModal: (show: boolean) => void;
 }
 
-
-function renderDeckOptions(deck: DataTypes.Deck, setShowModal: (show: boolean) => void) {
+const renderDeckOptions = memo(({deck, setShowModal}: deckOptionsProps) => {
     return (
         <View style={{ 
             width: '100%',
@@ -122,7 +126,7 @@ function renderDeckOptions(deck: DataTypes.Deck, setShowModal: (show: boolean) =
             </Link>
         </View>
     );
-}
+})
 
 function deckOptionsBtn(setShowModal: (show: boolean) => void, link: RelativePathString | ExternalPathString, text: string) {
     return (
