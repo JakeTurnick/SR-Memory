@@ -10,16 +10,25 @@ export const decks = sqliteTable('deck_table', {
     //cards: deckCardsRelationship
 })
 
-export const deckCardsRelationship = relations(decks, ({ many }) => ({
-    cards: many(cards)
-}))
-
 export const cards = sqliteTable("card_table", {
     id: integer('id').primaryKey({autoIncrement: true}),
     guid: text('guid').$defaultFn(() => uuidv6()),
-    cardId: integer('cardId')
+    deckId: integer('deckId').references(() => decks.id), // Foreign key to a deck
+    //cardId: integer('cardId') -- why did I have this?
     //cardFaces: cardFacesRelationship
-})
+});
+
+
+// relations must be declared both ways for Drizzle to 'infer relations' between them
+export const deckCardsRelationship = relations(decks, ({ many }) => ({
+    cards: many(cards)
+}));
+export const cardDeckRelation = relations(cards, ({ one }) => ({
+    deck: one(decks, {
+        fields: [cards.deckId],
+        references: [decks.id]
+    })
+}));
 
 // Specifies that cards have many faces
 export const cardFacesRelationship = relations(cards, ({many}) => ({
@@ -30,6 +39,7 @@ export const cardFaces = sqliteTable("face_table", {
     id: integer('id').primaryKey({autoIncrement: true}),
     guid: text('guid').$defaultFn(() => uuidv6()),
     cardId: integer('id').references(() => cards.id), // Foreign key to a card
+    faceIndex: integer('faceIndex').notNull(), // order of card face
     //content: faceContentRelatinoship
 })
 
@@ -42,6 +52,7 @@ export const content = sqliteTable('content_table', {
     guid: text('guid').$defaultFn(() => uuidv6()),
     type: text('type', { mode: "text", length: 20}), // e.g., 'text', 'image', 'multiple_choice'
     cardFaceId: integer('cardFaceId').references(() => cardFaces.id)
+    // value: contentRelationship
 })
 
 export const contentRelationships = relations(content, ({ one }) => ({
