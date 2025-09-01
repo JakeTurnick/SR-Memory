@@ -14,7 +14,7 @@ export default function DeckViewer() {
     useEffect(() => {
         const fetchDecks = async () => {
             try {
-                console.log(db.deckQueries.findAllDecks())
+                //console.log(db.deckQueries.findAllDecks())
                 db.deckQueries.findAllDecks().then(fetchedDecks => {
                     setDecks(fetchedDecks);
                 });
@@ -48,7 +48,7 @@ export default function DeckViewer() {
 // STATE MUST BE IN COMPONENTS - NOT IN  FUNCTIONS (components are PascalCase)
 function RenderDeck({ deck }: { deck: DataTypes.Deck }) {
     const [showModal, setShowModal] = useState(false);
-    console.log("rendered deck: ", deck.id)
+
     return (
         <Pressable  
         style={[sharedStyles.centeredContainer, { 
