@@ -1,12 +1,33 @@
 import { sharedStyles } from "@/components/ui/sharedStyles";
 import { ExternalPathString, Link, RelativePathString, Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import * as DataTypes from "@/constants/DataTypes";
-import { exampleDecks } from "@/constants/dummyData";
+import { useDatabase } from "@/db/queries";
 
 export default function DeckViewer() {
+    const db = useDatabase();
+    const [decks, setDecks] = useState<DataTypes.Deck[]>();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDecks = async () => {
+            try {
+                console.log(db.deckQueries.findAllDecks())
+                db.deckQueries.findAllDecks().then(fetchedDecks => {
+                    setDecks(fetchedDecks);
+                });
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching decks: ", error);
+            }
+        };
+        
+        fetchDecks()
+    }, []);
+
+    (window as any).decks = decks;
     return (
         <ScrollView contentContainerStyle={[sharedStyles.centeredContainer, { 
             display: 'flex',
@@ -16,21 +37,20 @@ export default function DeckViewer() {
         }]}>
             <Stack.Screen options={{ title: 'Deck Viewer' }} />
             {
-                exampleDecks.map(deck => renderDecks(deck))
-                // map over dekcs with render single deck,
-                // this prevents modal for being rendered for all decks - as oppsed to the one clicked
-                //renderDecks(exampleDecks)
+                !loading && decks !== undefined ? decks.map(deck => <RenderDeck key={deck.guid} deck={deck} />)
+                : <Text style={sharedStyles.h1Text}>No decks found. Please create a deck first.</Text>
+                // map over decks with render single deck, prevents one modal for being rendered for all decks
             }
         </ScrollView>
     )
 }
 
-
-function renderDecks(deck: DataTypes.Deck) {
+// STATE MUST BE IN COMPONENTS - NOT IN  FUNCTIONS (components are PascalCase)
+function RenderDeck({ deck }: { deck: DataTypes.Deck }) {
     const [showModal, setShowModal] = useState(false);
+    console.log("rendered deck: ", deck.id)
     return (
-        <Pressable 
-        key={deck.id} 
+        <Pressable  
         style={[sharedStyles.centeredContainer, { 
             margin: 10,
             padding: 10,

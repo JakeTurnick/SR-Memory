@@ -30,7 +30,7 @@ export default function DeckEditor() {
         //console.log("testing queries: ", db, queries);
         //queries.deckQueries.createDeck(db, "Test Deck", "This is a test deck")
         console.log("Fetching deck with ID: ", id);
-        const foundDeck = exampleDecks.find(deck => deck.id === id as string);
+        const foundDeck = exampleDecks.find(deck => deck.guid === id as string);
         if (foundDeck) {
             setDeck(foundDeck);
             setUnchangedDeck(foundDeck);
@@ -93,7 +93,7 @@ export default function DeckEditor() {
             ></TextInput>}
             
             <ScrollView contentContainerStyle={Platform.OS === 'web' ? styles.webScrollView : styles.mobileScrollView}>
-                {deck.cards.map(card => renderCard(card, deck.id))}
+                {deck.cards.map(card => renderCard(card, deck.guid))}
             </ScrollView>
         </View>
     )
