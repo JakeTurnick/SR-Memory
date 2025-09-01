@@ -1,43 +1,66 @@
 import { Button } from "@react-navigation/elements";
 import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, DimensionValue, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, DimensionValue, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { sharedStyles } from "@/components/ui/sharedStyles";
 
 import * as DataTypes from "@/constants/DataTypes";
-import { exampleDecks } from "@/constants/dummyData";
 import { useDatabase } from "@/db/queries";
+
+import add_box from "@/assets/Icons/add_box.svg";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
+let minWidth: DimensionValue = '90%';
+let minHeight: DimensionValue = null;
+let maxWidht: DimensionValue = null;
+let maxHeight: DimensionValue = null;
+
+if (Platform.OS === 'web') {
+    minWidth = 200;
+    minHeight = 400;
+    maxWidht = 300;
+    maxHeight = 600;
+}
+
 export default function DeckEditor() {
+    const db = useDatabase();
     const { id } = useLocalSearchParams();
     const [deck, setDeck] = useState<DataTypes.Deck | undefined>(undefined); // value used for page
     const [unChangedDeck, setUnchangedDeck] = useState<DataTypes.Deck | undefined>(undefined); // from DB, used to compare changes
+    const [isLoading, setIsLoading] = useState(true);
 
-    //const db = useSQLiteContext()!;
-    //const drizzleDB = drizzle(db);
-    //const { success, error } = useMigrations(db, migrations);
-    //console.log("Migration status: ", {success, error});
-    const db = useDatabase();
     
-    //(window as any).db = drizzleDB;
     (window as any).db = db; // for debugging purposes, to access queries in the console
     useEffect(() => {
-        
-        //console.log("testing queries: ", db, queries);
-        //queries.deckQueries.createDeck(db, "Test Deck", "This is a test deck")
-        console.log("Fetching deck with ID: ", id);
-        const foundDeck = exampleDecks.find(deck => deck.guid === id as string);
-        if (foundDeck) {
-            setDeck(foundDeck);
-            setUnchangedDeck(foundDeck);
-        } else {
-            console.error("Deck not found with ID:", id);
+        const findDeck = async (id: number) => {
+            //console.log("testing queries: ", db, queries);
+            //queries.deckQueries.createDeck(db, "Test Deck", "This is a test deck")
+            console.log("Fetching deck with ID: ", id);
+            try {
+                const foundDeck = db.deckQueries.findDeckById(Number(id));
+                setDeck(await foundDeck);
+                setUnchangedDeck(await foundDeck);
+                console.log("Found deck: ", foundDeck);
+            } catch (error) {
+                console.error("Error fetching deck by ID: ", error);
+            } finally {
+                setIsLoading(false);
+            }
         }
+        findDeck(Number(id));
+        
     }, [id]);
+
+    if (isLoading) {
+        return (
+            <View style={sharedStyles.centeredContainer}>
+                <Text style={sharedStyles.h1Text}>Loading deck...</Text>
+            </View>
+        )
+    }
 
     if (!deck) {
         return (
@@ -93,7 +116,29 @@ export default function DeckEditor() {
             ></TextInput>}
             
             <ScrollView contentContainerStyle={Platform.OS === 'web' ? styles.webScrollView : styles.mobileScrollView}>
-                {deck.cards.map(card => renderCard(card, deck.guid))}
+                <Pressable
+                    //href={{ pathname: `/editCard/[id]`, params: { id: card.id, deckId: deckId}}}
+                    onPress={() => {
+                        console.log("add new card")
+                        //router.push({ pathname: 'editCard/[id]' as RelativePathString, params: { cardId: card.id, deckId} })
+                    }}
+                    style={[sharedStyles.centeredContainer, {
+                        margin: 10,
+                        minWidth: minWidth,
+                        minHeight: minHeight,
+                        maxWidth: maxWidht,
+                        maxHeight: maxHeight,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderWidth: 2,
+                        borderRadius: 10,
+                        borderColor: '#cccccc',
+                        padding: 10,
+                        overflow: 'hidden',
+                        }]}>
+                    <Image source={add_box} style={{width: "40%", height: "40%"}}/>
+                </Pressable>
+                {(deck?.cards?.length > 0 && deck?.cards !== undefined) && deck.cards.map(card => <RenderCard card={card} deckId={deck.guid} key={card.id}/>)}
             </ScrollView>
         </View>
     )
@@ -101,20 +146,11 @@ export default function DeckEditor() {
 
 
 
-function renderCard(card: DataTypes.Card, deckId: string) {
+function RenderCard({ card, deckId }: { card: DataTypes.Card, deckId: string }) {
 
     const router = useRouter();
 
-    let minWidth: DimensionValue = '90%';
-    let minHeight: DimensionValue = null;
-    let maxWidht: DimensionValue = null;
-    let maxHeight: DimensionValue = null;
-    if (Platform.OS === 'web') {
-        minWidth = 200;
-        minHeight = 400;
-        maxWidht = 300;
-        maxHeight = 600;
-    }
+    
 
     return (
         <Pressable key={card.id} 

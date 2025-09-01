@@ -23,13 +23,13 @@ export default function editCard(props: CardProps) {
     useEffect(() => {
         if (!props.card) {
             console.warn("No card prop");
-            const foundDeck = exampleDecks.find(deck => deck.id === deckId as string);
+            const foundDeck = exampleDecks.find(deck => deck.guid === deckId as string);
             if (!foundDeck) {
                 console.error("Deck not found with ID:", deckId);
                 return;
             };
             console.log("Found deck: ", foundDeck, " cards: ", foundDeck.cards)
-            const foundCard = foundDeck.cards.find(card => card.id === cardId as string);
+            const foundCard = foundDeck.cards.find(card => card.guid === cardId as string);
             if (!foundCard) {
                 console.error("Card not found with ID:", cardId, ", in deck: ", deckId);
                 return;
