@@ -15,10 +15,11 @@ function createDeckQueries(database: any) {
         return allDecks;
       },
       findDeckById: async (deckId: number) => {
-        const deck = await database.select()
-          .from(decks)
-          .where(eq(decks.id, deckId))
-          
+        const deck = await database.query.decks.findFirst({
+          where: eq(decks.id, deckId),
+          with: { cards: true }
+        });
+
         return deck;
       },
       updateDeck: async (deckId: number, updates: Partial<{ name: string; description: string }>) => {
