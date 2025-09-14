@@ -3,6 +3,8 @@ import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router
 import { useEffect, useState } from "react";
 import { Dimensions, DimensionValue, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
+import EditCard from "@/app/editCard/[id]";
+import ModalComponent from "@/components/ui/Modal";
 import { sharedStyles } from "@/components/ui/sharedStyles";
 
 import * as DataTypes from "@/constants/DataTypes";
@@ -29,21 +31,23 @@ export default function DeckEditor() {
     const db = useDatabase();
     const { id } = useLocalSearchParams();
     const [deck, setDeck] = useState<DataTypes.Deck | undefined>(undefined); // value used for page
+    //TODO: unChangedDeck -> deckChanges --> deck = {deck, ...deckChanges}
     const [unChangedDeck, setUnchangedDeck] = useState<DataTypes.Deck | undefined>(undefined); // from DB, used to compare changes
     const [isLoading, setIsLoading] = useState(true);
+    const [showCreateCardModal, setShowCreateCardModal] = useState(false);
+
+    db.cardQueries.killCard(1);
 
     
     (window as any).db = db; // for debugging purposes, to access queries in the console
     useEffect(() => {
         const findDeck = async (id: number) => {
-            //console.log("testing queries: ", db, queries);
-            //queries.deckQueries.createDeck(db, "Test Deck", "This is a test deck")
-            console.log("Fetching deck with ID: ", id);
+            //console.log("Fetching deck with ID: ", id);
             try {
                 const foundDeck = db.deckQueries.findDeckById(Number(id));
                 setDeck(await foundDeck);
                 setUnchangedDeck(await foundDeck);
-                console.log("Found deck: ", foundDeck);
+                //console.log("Found deck: ", foundDeck);
             } catch (error) {
                 console.error("Error fetching deck by ID: ", error);
             } finally {
@@ -120,6 +124,8 @@ export default function DeckEditor() {
                     //href={{ pathname: `/editCard/[id]`, params: { id: card.id, deckId: deckId}}}
                     onPress={() => {
                         console.log("add new card")
+
+                        setShowCreateCardModal(true);
                         //router.push({ pathname: 'editCard/[id]' as RelativePathString, params: { cardId: card.id, deckId} })
                     }}
                     style={[sharedStyles.centeredContainer, {
@@ -140,6 +146,15 @@ export default function DeckEditor() {
                 </Pressable>
                 {(deck?.cards?.length > 0 && deck?.cards !== undefined) && deck.cards.map(card => <RenderCard card={card} deckId={deck.guid} key={card.id}/>)}
             </ScrollView>
+            {/* MODAL FOR ADDING A NEW CARD */}
+            <ModalComponent 
+                visible={showCreateCardModal} 
+                setVisible={setShowCreateCardModal}
+                fgStyleOverride={{width: '80%'}}
+                >
+                <Text style={{...sharedStyles.h1Text}}>New Card:</Text>
+                <EditCard deck={deck} />
+            </ModalComponent>
         </View>
     )
 }
@@ -147,10 +162,7 @@ export default function DeckEditor() {
 
 
 function RenderCard({ card, deckId }: { card: DataTypes.Card, deckId: string }) {
-
     const router = useRouter();
-
-    
 
     return (
         <Pressable key={card.id} 

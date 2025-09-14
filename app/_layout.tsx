@@ -1,6 +1,8 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Drawer } from 'expo-router/drawer';
+import { Suspense } from 'react';
+import { ActivityIndicator } from 'react-native';
 import 'react-native-reanimated';
 
 import { drizzle } from 'drizzle-orm/expo-sqlite';
@@ -27,26 +29,28 @@ export default function RootLayout() {
 
   return (
     // return SQLiteProvider after testing
-    <SQLite.SQLiteProvider databaseName="testDB" onInit={initDb}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Drawer>
-            <Drawer.Screen
-              name="index"
-              options={{
-                title: 'Home',
-              }}
-            />
-            <Drawer.Screen
-              name="deckViewer"
-              options={{
-                title: 'Deck Viewer',
-              }}
-            />
-          </Drawer>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-    </SQLite.SQLiteProvider>
+    <Suspense fallback={<ActivityIndicator size="large" style={{ flex: 1 }} />}>
+      <SQLite.SQLiteProvider databaseName="testDB" onInit={initDb} options={{ enableChangeListener: true }}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Drawer>
+              <Drawer.Screen
+                name="index"
+                options={{
+                  title: 'Home',
+                }}
+              />
+              <Drawer.Screen
+                name="deckViewer"
+                options={{
+                  title: 'Deck Viewer',
+                }}
+              />
+            </Drawer>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </SQLite.SQLiteProvider>
+    </Suspense>
   );
 }
 
