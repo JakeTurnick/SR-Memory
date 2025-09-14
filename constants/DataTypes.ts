@@ -7,27 +7,28 @@ export type Deck = {
 };
 
 export type Card = {
-    id: number; // DB Primary key
-    guid: string; // Unique identifier
+    id?: number; // DB Primary key
+    guid?: string; // Unique identifier
     faces: CardFace[]; // 1 card to many faces
 };
 
 export type CardFace = {
-    id: number; // DB Primary key
-    guid: string; // Unique identifier
-    cardId: string; // PK of card this face belongs to
+    id?: number; // DB Primary key
+    guid?: string; // Unique identifier
+    cardId?: number; // PK of card this face belongs to
     faceIndex: number; // which face for a card? 1, 2, 3, ...
     content: Array<TextContent> // upgrade to -> (TextContent | MultipleChoiceContent | ImageContent)
 };
 
 export type Content = {
-    id: number; // DB Primary key
-    guid: string; // Unique identifier
+    id?: number; // DB Primary key
+    guid?: string; // Unique identifier
     type: string; // 'text', 'image', 'multiple_choice', etc
-    cardFaceId: string; // Foreign key to CardFace
+    cardFaceId: number; // Foreign key to CardFace
+    cardFaceIndex: number;
 };
 
 export interface TextContent extends Content  {
-    id: number; // Primary key, also foreign key to Content
+    //id: number; // Primary key, also foreign key to Content
     value: string; // the actual text shown
 };
