@@ -5,8 +5,8 @@ import { v6 as uuidv6 } from 'uuid';
 
 // Deck Table
 export const decks = sqliteTable('deck_table', {
-    id: integer('id').primaryKey({autoIncrement: true}),
-    guid: text('guid').$defaultFn(() => uuidv6()),
+    id: integer('id').primaryKey({autoIncrement: true}).notNull(),
+    guid: text('guid').$defaultFn(() => uuidv6()).notNull(),
     name: text('name').notNull(),
     description: text('description'),
     //cards: deckCardsRelationship
@@ -14,9 +14,9 @@ export const decks = sqliteTable('deck_table', {
 
 // Card Table
 export const cards = sqliteTable("card_table", {
-    id: integer('id').primaryKey({autoIncrement: true}),
-    guid: text('guid').$defaultFn(() => uuidv6()),
-    deckId: integer('deckId').references(() => decks.id), // Foreign key to a deck
+    id: integer('id').primaryKey({autoIncrement: true}).notNull(),
+    guid: text('guid').$defaultFn(() => uuidv6()).notNull(),
+    deckId: integer('deckId').references(() => decks.id, {onDelete: "cascade"}), // Foreign key to a deck
     //cardId: integer('cardId') -- why did I have this?
     //cardFaces: cardFacesRelationship
 });
@@ -35,9 +35,9 @@ export const cardDeckRelation = relations(cards, ({ one }) => ({
 
 // CardFace Table
 export const cardFaces = sqliteTable("face_table", {
-    id: integer('id').primaryKey({autoIncrement: true}),
-    guid: text('guid').$defaultFn(() => uuidv6()),
-    cardId: integer('id').references(() => cards.id), // Foreign key to a card
+    id: integer('id').primaryKey({autoIncrement: true}).notNull(),
+    guid: text('guid').$defaultFn(() => uuidv6()).notNull(),
+    cardId: integer('id').references(() => cards.id, {onDelete: "cascade"}), // Foreign key to a card
     faceIndex: integer('faceIndex').notNull(), // order of card face
     //content: faceContentRelatinoship
 });
@@ -56,10 +56,10 @@ export const faceCardRelation = relations(cardFaces, ({ one }) => ({
 
 // Base Content Table
 export const content = sqliteTable('content_table', {
-    id: integer('id').primaryKey({autoIncrement: true}),
+    id: integer('id').primaryKey({autoIncrement: true}).notNull(),
     guid: text('guid').$defaultFn(() => uuidv6()),
     type: text('type', { mode: "text", length: 20}), // e.g., 'text', 'image', 'multiple_choice'
-    cardFaceId: integer('cardFaceId').references(() => cardFaces.id)
+    cardFaceId: integer('cardFaceId').references(() => cardFaces.id, {onDelete: "cascade"})
     // value: contentRelationship
 });
 
@@ -76,11 +76,11 @@ export const contentFaceRelation = relations(content, ({ one }) => ({
 
 // Typed Content Tables
 export const textContent = sqliteTable('text_content_table', {
-    id: integer('id').primaryKey().references(() => content.id),
+    id: integer('id').primaryKey().references(() => content.id, {onDelete: "cascade"}),
     value: text('value').notNull(),
 });
 export const imageContent = sqliteTable('image_content_table', {
-    id: integer('id').primaryKey().references(() => content.id),
+    id: integer('id').primaryKey().references(() => content.id, {onDelete: "cascade"}),
     imageUrl: text('imageUrl').notNull(),
 });
 
@@ -109,4 +109,16 @@ export const typedImageContentRelation = relations(imageContent, ({ one }) => ({
         references: [content.id],
     })
 }));
+
+export type NewDeck = typeof decks.$inferInsert;
+export type NewCard = typeof cards.$inferInsert;
+export type NewCardFace = typeof cardFaces.$inferInsert;
+export type NewContent = typeof content.$inferInsert;
+export type NewTextContent = typeof textContent.$inferInsert;
+
+export type Deck = typeof decks.$inferSelect;
+export type Card = typeof cards.$inferSelect;
+export type CardFace = typeof cardFaces.$inferSelect;
+export type Content = typeof content.$inferSelect;
+export type TextContent = typeof textContent.$inferSelect;
 
