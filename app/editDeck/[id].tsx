@@ -36,8 +36,6 @@ export default function DeckEditor() {
     const [isLoading, setIsLoading] = useState(true);
     const [showCreateCardModal, setShowCreateCardModal] = useState(false);
 
-    db.cardQueries.killCard(1);
-
     
     (window as any).db = db; // for debugging purposes, to access queries in the console
     useEffect(() => {
@@ -47,7 +45,7 @@ export default function DeckEditor() {
                 const foundDeck = db.deckQueries.findDeckById(Number(id));
                 setDeck(await foundDeck);
                 setUnchangedDeck(await foundDeck);
-                //console.log("Found deck: ", foundDeck);
+                console.log("Found deck: ", foundDeck);
             } catch (error) {
                 console.error("Error fetching deck by ID: ", error);
             } finally {
@@ -163,6 +161,7 @@ export default function DeckEditor() {
 
 function RenderCard({ card, deckId }: { card: DataTypes.Card, deckId: string }) {
     const router = useRouter();
+    console.log("RenderCard card: ", card);
 
     return (
         <Pressable key={card.id} 
@@ -185,7 +184,8 @@ function RenderCard({ card, deckId }: { card: DataTypes.Card, deckId: string }) 
             padding: 10,
             overflow: 'hidden',
             }]}>
-            {card.faces.map(face => (
+            { 
+            card.faces?.map(face => (
                 <Text key={face.id} style={{
                     ...sharedStyles.text,
                     borderWidth: 1,
@@ -199,7 +199,8 @@ function RenderCard({ card, deckId }: { card: DataTypes.Card, deckId: string }) 
                     {face.faceIndex === 1 ? "Question: " : "Answer: "}
                     {face.content[0].value}
                 </Text>
-            ))}
+            ))
+            }
         </Pressable>
     );
 }
